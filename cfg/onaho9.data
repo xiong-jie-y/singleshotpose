@@ -1,0 +1,14 @@
+train  = LINEMOD/onaho9/test.txt
+valid  = LINEMOD/onaho9/train.txt
+backup = backup/onaho9
+mesh = LINEMOD/onaho9/onaho9.ply
+tr_range = LINEMOD/onaho9/training_range.txt
+name = onaho9
+diam = 0.202378
+gpus = 0
+width = 640
+height = 480
+fx = 612.6339111328125
+fy = 611.052734375
+u0 = 327.3898010253906
+v0 = 253.2864227294922

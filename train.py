@@ -95,6 +95,10 @@ def train(epoch):
         region_loss.seen = region_loss.seen + data.data.size(0)
         # Compute loss, grow an array of losses for saving later on
         loss = region_loss(output, target, epoch)
+        if np.isnan(loss.data.item()):
+            # import IPython; IPython.embed()
+            optimizer.step()
+            continue
         training_iters.append(epoch * math.ceil(len(train_loader.dataset) / float(batch_size) ) + niter)
         training_losses.append(convert2cpu(loss.data))
         niter += 1
@@ -162,15 +166,19 @@ def test(epoch, niter):
         # Pass the data to GPU
         if use_cuda:
             data = data.cuda()
-            target = target.cuda()
+            # target = target.cuda()
+
         # Wrap tensors in Variable class, set volatile=True for inference mode and to use minimal memory during inference
         data = Variable(data, volatile=True)
         t2 = time.time()
         # Formward pass
         output = model(data).data  
+
         t3 = time.time()
         # Using confidence threshold, eliminate low-confidence predictions
         all_boxes = get_region_boxes(output, num_classes, num_keypoints)        
+        # try:
+        all_boxes = [t.cpu() for t in all_boxes]
         t4 = time.time()
         # Iterate through all batch elements
         for box_pr, target in zip([all_boxes], [target[0]]):
@@ -185,7 +193,7 @@ def test(epoch, niter):
                     box_gt.append(truths[k][j])
                 box_gt.extend([1.0, 1.0])
                 box_gt.append(truths[k][0])
-                   
+                
                 # Denormalize the corner predictions 
                 corners2D_gt = np.array(np.reshape(box_gt[:num_keypoints*2], [num_keypoints, 2]), dtype='float32')
                 corners2D_pr = np.array(np.reshape(box_pr[:num_keypoints*2], [num_keypoints, 2]), dtype='float32')
@@ -233,6 +241,8 @@ def test(epoch, niter):
                 testing_error_angle  += angle_dist
                 testing_error_pixel  += pixel_dist
                 testing_samples      += 1
+        # except:
+        #     import IPython; IPython.embed()
 
         t5 = time.time()
 

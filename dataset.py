@@ -68,6 +68,7 @@ class listDataset(Dataset):
                width = 13*self.cell_size
                self.shape = (width, width)
             elif self.seen < 20*self.nbatches*self.batch_size:
+               # import IPython; IPython.embed()
                width = (random.randint(0,7) + 13)*self.cell_size
                self.shape = (width, width)
             elif self.seen < 30*self.nbatches*self.batch_size:
@@ -95,6 +96,11 @@ class listDataset(Dataset):
             hue = 0.1
             saturation = 1.5 
             exposure = 1.5
+
+            # jitter = 0
+            # hue = 0
+            # saturation = 0
+            # exposure = 0
 
             # Get background image path
             random_bg_index = random.randint(0, len(self.bg_file_names) - 1)

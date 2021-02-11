@@ -107,8 +107,9 @@ def valid(datacfg, modelcfg, weightfile):
     for batch_idx, (data, target) in enumerate(test_loader):
         t1 = time.time()
         # Pass data to GPU
+        # import IPython; IPython.embed()
         data = data.cuda()
-        target = target.cuda()
+        # target = target.cuda()
         # Wrap tensors in Variable class, set volatile=True for inference mode and to use minimal memory during inference
         data = Variable(data, volatile=True)
         t2 = time.time()
@@ -117,6 +118,7 @@ def valid(datacfg, modelcfg, weightfile):
         t3 = time.time()
         # Using confidence threshold, eliminate low-confidence predictions
         all_boxes = get_region_boxes(output, num_classes, num_keypoints)        
+        all_boxes = [t.cpu() for t in all_boxes]
         t4 = time.time()
         # Evaluation
         # Iterate through all batch elements

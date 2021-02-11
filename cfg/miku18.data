@@ -1,0 +1,14 @@
+train  = LINEMOD/miku18/train.txt
+valid  = LINEMOD/miku18/test.txt
+backup = backup/miku18
+mesh = LINEMOD/miku18/model.ply
+tr_range = LINEMOD/miku18/training_range.txt
+name = miku18
+diam = 0.129739
+gpus = 0
+width = 640
+height = 480
+fx = 612.6339111328125
+fy = 611.052734375
+u0 = 327.3898010253906
+v0 = 253.2864227294922
